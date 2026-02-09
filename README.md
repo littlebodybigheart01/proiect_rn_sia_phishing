@@ -1,172 +1,207 @@
-# 📘 README – Etapa 3: Analiza și Pregătirea Setului de Date pentru Rețele Neuronale
+# 📘 README – Etapa 4: Arhitectura Completă a Aplicației SIA bazată pe Rețele Neuronale
 
 **Disciplina:** Rețele Neuronale  
 **Instituție:** POLITEHNICA București – FIIR  
 **Student:** Chelu Fabian-Cătălin  
-**Data:** 21.11.2025  
+**Link Repository GitHub**  
+`https://github.com/littlebodybigheart01/proiect_rn_phishing`  
+**Data:** 17.01.2026  
+---
+
+## Scopul Etapei 4
+
+Această etapă corespunde punctului **5. Dezvoltarea arhitecturii aplicației software bazată pe RN** din lista de 9 etape din specificațiile proiectului.
+
+În această etapă a fost livrat scheletul complet al SIA: pipeline end-to-end, model definit/compilat, UI funcțional și flux de stări documentat.
+
+### IMPORTANT - Ce înseamnă "schelet funcțional":
+
+**CE TREBUIE SĂ FUNCȚIONEZE:**
+- Toate modulele pornesc fără erori.
+- Pipeline-ul complet rulează end-to-end (date -> output UI/API).
+- Modelul RN este definit și compilat.
+- UI/Web layer primește input și returnează output.
+
+**CE NU E NECESAR ÎN ETAPA 4:**
+- Model cu performanță finală optimizată.
+- Tuning complet de hiperparametri.
+- Deployment cloud/producție.
 
 ---
 
-## Introducere
+##  Livrabile Obligatorii
 
-Acest document descrie activitățile realizate în **Etapa 3**, în care se analizează și se preprocesează setul de date necesar proiectului "Detecție phishing în mesaje text". Scopul etapei este pregătirea corectă a datelor pentru instruirea modelului RN, cu trasabilitate completă a transformărilor.
+### 1. Tabelul Nevoie Reală → Soluție SIA → Modul Software (max ½ pagină)
+
+| **Nevoie reală concretă** | **Cum o rezolvă SIA-ul** | **Modul software responsabil** |
+|---------------------------|--------------------------|--------------------------------|
+| Detectarea rapidă a mesajelor phishing în flux email/SMS | Clasificare binară cu scor probabilistic și verdict în UI în < 2 secunde | RN + UI |
+| Reducerea riscului de click pe link-uri malițioase | Separare SAFE/SUSPECT/PHISH prin praguri configurabile | RN + UI + State Machine |
+| Trasabilitate și învățare continuă din corecții utilizator | Logging feedback (`correct/wrong`) pentru audit și iterații de date | UI/API + Data Logging |
 
 ---
 
-##  1. Structura Repository-ului Github (versiunea Etapei 3)
+### 2. Contribuția Voastră Originală la Setul de Date – MINIM 40% din Totalul Observațiilor Finale
+
+#### Cum se calculează 40%:
+
+- Total observații finale: **40158**
+- Observații publice (email + sms): **22658**
+- Observații originale (generate + patch targetat): **17500**
+- Procent contribuție originală: **43.58%** (`17500 / 40158`)
+
+Condiția minimă de 40% este îndeplinită.
+
+#### Tipuri de contribuții acceptate (exemple din inginerie):
+
+| **Tip contribuție** | **Aplicare în proiect** | **Dovada minimă** |
+|---------------------|-------------------------|-------------------|
+| Date sintetice prin metode avansate | Generare set RO pe scenarii phishing reale (bănci, curierat, utilități, social engineering) | `src/data_acquisition/generate_ai_data.py`, `data/generated/phishing_ai_ro_only.csv` |
+| Patch targetat pe cazuri dificile | Typosquatting, CEO fraud, callback scam, legit urgent work | `data/raw/phishing_ai_targeted_patch.csv` |
+
+#### Declarație obligatorie în README:
+
+### Contribuția originală la setul de date:
+
+**Total observații finale:** 40158  
+**Observații originale:** 17500 (43.58%)
+
+**Tipul contribuției:**
+- [ ] Date generate prin simulare fizică
+- [ ] Date achiziționate cu senzori proprii
+- [ ] Etichetare/adnotare manuală
+- [x] Date sintetice prin metode avansate
+
+**Descriere detaliată:**
+Datele originale au fost generate controlat în limba română, pe template-uri de phishing observate în practică (bancar, curierat, utilități, investiții false, autoritate falsă) și completate cu patch-uri țintite pentru cazuri care în mod obișnuit produc erori de clasificare. Setul a fost apoi unificat cu surse publice (email + SMS), deduplicat și filtrat pentru calitate.
+
+**Locația codului:** `src/data_acquisition/generate_ai_data.py`, `src/data_acquisition/merge_all_datasets.py`  
+**Locația datelor:** `data/generated/phishing_ai_ro_only.csv`, `data/raw/phishing_ai_targeted_patch.csv`
+
+**Dovezi:**
+- `docs/generated_vs_real.png`
+- `docs/data_statistics.csv`
+
+#### Exemple pentru "contribuție originală":
+- [x] Date sintetice cu scenarii variate și control al etichetelor
+- [x] Patch țintit pentru edge-cases relevante aplicației
+
+#### Atenție - Ce NU este considerat "contribuție originală":
+
+- simplă filtrare/normalizare pe date publice
+- subset nerelevant extras dintr-un dataset public
+- duplicare de date fără variație semantică
+
+---
+
+### 3. Diagrama State Machine a Întregului Sistem (OBLIGATORIE)
+
+**Locație:** `docs/state_machine.svg`
+
+Flux implementat:
+
+```text
+IDLE -> INPUT_CAPTURE -> PREPROCESS -> RN_INFERENCE -> CONFIDENCE_CHECK
+      -> {SAFE | SUSPECT | PHISH} -> DISPLAY -> LOG_FEEDBACK -> IDLE
+                     \-> ERROR -> IDLE
+```
+
+### Justificarea State Machine-ului ales:
+
+Am ales acest State Machine deoarece aplicația este orientată pe clasificare text/OCR cu răspuns rapid și trasabilitate. Stările separă explicit pașii tehnici (captură, preprocesare, inferență, decizie) de pașii operaționali (afișare, logging, feedback), ceea ce face fluxul robust și ușor de extins.
+
+Starea `SUSPECT` este utilă pentru zona de incertitudine, unde sistemul nu forțează verdict binar. Starea `ERROR` acoperă lipsa modelului, probleme OCR sau input invalid, apoi readuce aplicația în `IDLE` fără blocare.
+
+---
+
+### 4. Scheletul Complet al celor 3 Module Cerute la Curs (slide 7)
+
+| **Modul** | **Implementare în proiect** | **Cerință minimă funcțională** |
+|-----------|------------------------------|----------------------------------|
+| **1. Data Logging / Acquisition** | `src/data_acquisition/` | Generează și unifică date, produce CSV-uri valide |
+| **2. Neural Network Module** | `src/neural_network/model.py`, `save_untrained.py` | Model definit/compilat, salvat și reîncărcabil |
+| **3. Web Service / UI** | `app.py`, `src/api/server.py`, `src/app/README.md` | Primește input și returnează verdict + scor |
+
+#### Detalii per modul:
+
+#### **Modul 1: Data Logging / Acquisition**
+
+**Funcționalități obligatorii:**
+- [x] Scripturile rulează fără erori
+- [x] Generează CSV compatibil cu preprocesarea
+- [x] Asigură contribuție originală >= 40%
+- [x] Au documentație minimă în cod și README-uri
+
+#### **Modul 2: Neural Network Module**
+
+**Funcționalități obligatorii:**
+- [x] Arhitectură RN definită și compilată
+- [x] Model salvat/reîncărcat (`models/untrained_model.h5`)
+- [x] Justificare arhitectură în cod (`src/neural_network/model.py`)
+- [x] Model neantrenat disponibil pentru etapa de schelet
+
+#### **Modul 3: Web Service / UI**
+
+**Funcționalități MINIME obligatorii:**
+- [x] Interfață cu input text + OCR
+- [x] Output verdict + scor
+- [x] Screenshot demonstrativ în `docs/screenshots/ui_demo.png`
+
+---
+
+## Structura Repository-ului la Finalul Etapei 4 (OBLIGATORIE)
 
 ```text
 PROJECTPHISHING/
-├── README.md
-├── docs/
-│   ├── datasets/
-│   └── data_statistics.csv
 ├── data/
 │   ├── raw/
 │   ├── processed/
+│   ├── generated/
 │   ├── train/
 │   ├── validation/
 │   └── test/
 ├── src/
-│   ├── preprocessing/
 │   ├── data_acquisition/
-│   └── neural_network/
+│   ├── preprocessing/
+│   ├── neural_network/
+│   └── app/
+├── docs/
+│   ├── state_machine.svg
+│   ├── generated_vs_real.png
+│   └── screenshots/
+├── models/
+│   └── untrained_model.h5
 ├── config/
-│   └── preprocessing_config.yaml
+├── README.md
 └── requirements.txt
 ```
 
 ---
 
-##  2. Descrierea Setului de Date
+## Checklist Final – Bifați Totul Înainte de Predare
 
-### 2.1 Sursa datelor
+### Documentație și Structură
+- [x] Tabelul Nevoie -> Soluție -> Modul completat
+- [x] Declarație contribuție >=40% completată
+- [x] Dovezi contribuție originală prezente în `docs/`
+- [x] Diagrama State Machine salvată în `docs/state_machine.svg`
+- [x] Legendă/justificare State Machine inclusă
 
-- **Origine:** surse publice + date sintetice proprii.
-- **Modul de achiziție:** ☐ Senzori reali / ☐ Simulare / ☑ Fișier extern / ☑ Generare programatică
-- **Perioada / condițiile colectării:** decembrie 2025 – ianuarie 2026, procesare locală.
-- **Fișiere sursă:**
-  - `data/raw/emailreal.csv`
-  - `data/raw/smsreal.csv`
-  - `data/raw/phishing_ai_ro_only.csv` (copie sincronizată și în `data/generated/phishing_ai_ro_only.csv`)
-  - `data/raw/phishing_ai_targeted_patch.csv`
+### Modul 1: Data Logging / Acquisition
+- [x] Cod funcțional pentru generare/unificare date
+- [x] CSV-uri valide generate
+- [x] Contribuție originală verificabilă >=40%
 
-### 2.2 Caracteristicile dataset-ului
+### Modul 2: Neural Network
+- [x] Arhitectură RN definită/compilată
+- [x] Model neantrenat salvat (`models/untrained_model.h5`)
 
-- **Număr total de observații finale:** 40158
-- **Număr de caracteristici:** 5
-- **Tipuri de date:** ☐ Numerice / ☑ Categoriale / ☑ Text / ☐ Imagini
-- **Format fișiere:** ☑ CSV / ☐ TXT / ☐ JSON / ☐ PNG
-
-### 2.3 Descrierea fiecărei caracteristici
-
-| **Caracteristică** | **Tip** | **Unitate** | **Descriere** | **Domeniu valori** |
-|-------------------|---------|-------------|---------------|--------------------|
-| `text` | string | - | conținut mesaj email/SMS | lungime variabilă |
-| `label` | int | - | eticheta de clasă | `{0=legit, 1=phishing}` |
-| `type` | categorial | - | tip intrare | `{email, sms, mixed}` |
-| `source` | categorial | - | sursa mesajului | surse publice + surse generate |
-| `lang` | categorial | - | limba mesajului | `{en, ro, mixed}` |
-
-**Fișier recomandat:** `docs/data_statistics.csv`
+### Modul 3: Web Service / UI
+- [x] UI pornește și permite inferență
+- [x] Screenshot în `docs/screenshots/ui_demo.png`
 
 ---
 
-##  3. Analiza Exploratorie a Datelor (EDA) – Sintetic
-
-### 3.1 Statistici descriptive aplicate
-
-- **Total:** 40158 observații
-- **Distribuție clase:**
-  - legit (`label=0`): 22624
-  - phishing (`label=1`): 17534
-- **Distribuție limbi:**
-  - `en`: 22658
-  - `ro`: 15000
-  - `mixed`: 2500
-- **Lungime text:**
-  - medie: `1323.90`
-  - mediană: `195`
-  - percentila 95: `3518.15`
-
-### 3.2 Analiza calității datelor
-
-- Eliminare valori lipsă pe `text` și `label`.
-- Curățare whitespace/newline/tab din mesaje.
-- Eliminare duplicate pe `text`.
-- Filtrare mesaje prea scurte (`min_text_len=6`).
-
-### 3.3 Probleme identificate
-
-- Variabilitate mare a lungimii mesajelor (SMS foarte scurte vs email-uri lungi).
-- Mesaje foarte ambigue (context intern/BEC) care pot induce confuzii.
-- Dezechilibru moderat de clasă (aprox. 56/44), acceptabil fără resampling în Etapa 3.
-
----
-
-##  4. Preprocesarea Datelor
-
-### 4.1 Curățarea datelor
-
-- Eliminare duplicate: **1533** rânduri eliminate.
-- Eliminare valori lipsă (`text`, `label`).
-- Curățare text (`\n`, `\r`, `\t`, spații multiple).
-- Filtru minim lungime text: `>5` caractere.
-
-### 4.2 Transformarea caracteristicilor
-
-- `lowercase: true` (conform `config/preprocessing_config.yaml`)
-- `remove_urls: false` (URL-urile se păstrează pentru semnal phishing)
-- Nu se aplică one-hot pe metadata în această etapă (metadata rămâne pentru analiză/documentare)
-- Etichete convertite explicit la `int`
-
-### 4.3 Structurarea seturilor de date
-
-**Împărțire folosită:**
-- `70%` train
-- `15%` validation
-- `15%` test
-
-**Rezultate split:**
-- `data/train/train.csv`: 28109
-- `data/validation/validation.csv`: 6024
-- `data/test/test.csv`: 6024
-
-**Principii respectate:**
-- Stratificare pe `label`
-- `random_state=42`
-- Fără leakage între split-uri
-
-### 4.4 Salvarea rezultatelor preprocesării
-
-- `data/raw/multilingualdataset.csv`
-- `data/processed/processed.csv`
-- `data/train/train.csv`
-- `data/validation/validation.csv`
-- `data/test/test.csv`
-- configurare în `config/preprocessing_config.yaml`
-
----
-
-##  5. Fișiere Generate în Această Etapă
-
-- `src/data_acquisition/merge_all_datasets.py`
-- `src/preprocessing/preprocess_and_split.py`
-- `data/raw/multilingualdataset.csv`
-- `data/processed/processed.csv`
-- `data/train/train.csv`
-- `data/validation/validation.csv`
-- `data/test/test.csv`
-- `docs/data_statistics.csv`
-
----
-
-##  6. Stare Etapă (de completat de student)
-
-- [x] Structură repository configurată
-- [x] Dataset analizat (EDA realizată)
-- [x] Date preprocesate
-- [x] Seturi train/val/test generate
-- [x] Documentație actualizată în README + artefacte în `docs/`
-
----
+**Predarea etapei (recomandat):**
+- mesaj commit: `Etapa 4 completa - Arhitectura SIA functionala`
+- tag: `v0.4-architecture`

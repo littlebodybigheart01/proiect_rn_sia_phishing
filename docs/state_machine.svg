@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820">
+  <style>
+    .bg { fill: #0b0f14; }
+    .card { fill: #0f1a24; stroke: #00c27a; stroke-width: 2; rx: 12; ry: 12; }
+    .card2 { fill: #0f1320; stroke: #00c27a; stroke-width: 2; rx: 12; ry: 12; }
+    .text { fill: #d6fbe8; font-family: "DejaVu Sans", Arial, sans-serif; font-size: 14px; }
+    .title { fill: #00f3a5; font-family: "DejaVu Sans", Arial, sans-serif; font-size: 20px; font-weight: bold; }
+    .subtitle { fill: #7ae7c4; font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; }
+    .arrow { stroke: #00c27a; stroke-width: 2.5; marker-end: url(#arrowhead); }
+    .dashed { stroke-dasharray: 6 6; }
+    .badge { fill: #00c27a; }
+    .badgeText { fill: #0b0f14; font-family: "DejaVu Sans", Arial, sans-serif; font-size: 12px; font-weight: bold; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#00c27a" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1400" height="820" />
+
+  <text x="40" y="40" class="title">State Machine / Masina de Stari - Phishing Detector SIA</text>
+  <text x="40" y="62" class="subtitle">Flux complet: Input → Preprocesare → Inferenta RN → Decizie → Logging + Feedback → Idle</text>
+
+  <!-- Cards -->
+  <rect x="60" y="120" width="190" height="80" class="card" />
+  <text x="75" y="150" class="text">IDLE</text>
+  <text x="75" y="172" class="subtitle">Asteapta input</text>
+  <text x="75" y="192" class="subtitle">(Wait for input)</text>
+
+  <rect x="300" y="120" width="230" height="80" class="card" />
+  <text x="315" y="150" class="text">INPUT</text>
+  <text x="315" y="172" class="subtitle">Text / OCR Imagine</text>
+  <text x="315" y="192" class="subtitle">Text / OCR Image</text>
+
+  <rect x="580" y="120" width="210" height="80" class="card" />
+  <text x="595" y="150" class="text">PREPROCESS</text>
+  <text x="595" y="172" class="subtitle">Curatare + Tokenizare</text>
+  <text x="595" y="192" class="subtitle">Clean + Tokenize</text>
+
+  <rect x="840" y="120" width="230" height="80" class="card" />
+  <text x="855" y="150" class="text">RN INFERENCE</text>
+  <text x="855" y="172" class="subtitle">Predictie probabilitate</text>
+  <text x="855" y="192" class="subtitle">Probability score</text>
+
+  <rect x="1120" y="120" width="220" height="80" class="card" />
+  <text x="1135" y="150" class="text">CONFIDENCE CHECK</text>
+  <text x="1135" y="172" class="subtitle">Thresholds low/high</text>
+  <text x="1135" y="192" class="subtitle">Praguri low/high</text>
+
+  <rect x="840" y="250" width="260" height="90" class="card" />
+  <text x="855" y="280" class="text">OUTPUT DECISION</text>
+  <text x="855" y="302" class="subtitle">SAFE / PHISHING / SUSPECT</text>
+  <text x="855" y="322" class="subtitle">SIGUR / PHISHING / SUSPICIOS</text>
+
+  <rect x="520" y="260" width="260" height="80" class="card" />
+  <text x="535" y="290" class="text">LOG + FEEDBACK</text>
+  <text x="535" y="312" class="subtitle">Salvare + validare user</text>
+  <text x="535" y="332" class="subtitle">Save + user validation</text>
+
+  <rect x="260" y="260" width="210" height="80" class="card" />
+  <text x="275" y="290" class="text">RETURN IDLE</text>
+  <text x="275" y="312" class="subtitle">Inchidere flux</text>
+  <text x="275" y="332" class="subtitle">Close cycle</text>
+
+  <rect x="580" y="420" width="240" height="90" class="card2" />
+  <text x="595" y="450" class="text">ERROR STATE</text>
+  <text x="595" y="472" class="subtitle">Model lipsa / OCR fail</text>
+  <text x="595" y="492" class="subtitle">Missing model / OCR fail</text>
+
+  <!-- Arrows -->
+  <line x1="250" y1="160" x2="300" y2="160" class="arrow" />
+  <line x1="530" y1="160" x2="580" y2="160" class="arrow" />
+  <line x1="790" y1="160" x2="840" y2="160" class="arrow" />
+  <line x1="1070" y1="160" x2="1120" y2="160" class="arrow" />
+
+  <line x1="1230" y1="200" x2="1000" y2="250" class="arrow" />
+  <line x1="840" y1="295" x2="780" y2="295" class="arrow" />
+  <line x1="520" y1="300" x2="470" y2="300" class="arrow" />
+
+  <line x1="685" y1="200" x2="700" y2="420" class="arrow dashed" />
+  <text x="720" y="360" class="subtitle">exceptii / exceptions</text>
+
+  <line x1="700" y1="510" x2="700" y2="200" class="arrow dashed" />
+  <text x="720" y="235" class="subtitle">recover</text>
+
+  <!-- Legend -->
+  <rect x="60" y="600" width="1280" height="170" class="card2" />
+  <rect x="80" y="620" width="100" height="26" class="badge" />
+  <text x="92" y="638" class="badgeText">LEGENDA</text>
+
+  <text x="80" y="670" class="text">- INPUT: UI text sau OCR pe imagine (Text input or OCR image)</text>
+  <text x="80" y="695" class="text">- CONFIDENCE CHECK: praguri low/high din sidebar (low/high thresholds)</text>
+  <text x="80" y="720" class="text">- OUTPUT DECISION: mapare SAFE/PHISH/SUSPECT + afisare UI</text>
+  <text x="80" y="745" class="text">- LOG + FEEDBACK: salveaza predictia si feedback-ul utilizatorului</text>
+</svg>
