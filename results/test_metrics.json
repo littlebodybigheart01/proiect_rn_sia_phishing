@@ -1,0 +1,55 @@
+{
+    "timestamp": "2026-01-17T17:24:07",
+    "test_accuracy": 0.9887118193891102,
+    "test_f1_macro": 0.9885203416769954,
+    "test_precision_macro": 0.988824191325322,
+    "test_recall_macro": 0.9882277156511938,
+    "classification_report": {
+        "Legit": {
+            "precision": 0.9879694835680751,
+            "recall": 0.9920447849145551,
+            "f1-score": 0.990002940311673,
+            "support": 3394.0
+        },
+        "Phishing": {
+            "precision": 0.9896788990825688,
+            "recall": 0.9844106463878327,
+            "f1-score": 0.987037743042318,
+            "support": 2630.0
+        },
+        "accuracy": 0.9887118193891102,
+        "macro avg": {
+            "precision": 0.988824191325322,
+            "recall": 0.9882277156511938,
+            "f1-score": 0.9885203416769954,
+            "support": 6024.0
+        },
+        "weighted avg": {
+            "precision": 0.9887157921343298,
+            "recall": 0.9887118193891102,
+            "f1-score": 0.9887083737747534,
+            "support": 6024.0
+        }
+    },
+    "best_epoch": 4,
+    "stopped_epoch": 15,
+    "epochs_ran": 16,
+    "artifacts": {
+        "traininghistory_csv": "results/training_history.csv",
+        "testmetrics_json": "results/test_metrics.json",
+        "loss_curve_png": "docs/loss_curve.png",
+        "confusion_matrix_png": "docs/confusion_matrix.png",
+        "model_dir": "models/phishing_distilbert_multilingual",
+        "trained_model_h5": "models/trained_model.h5"
+    },
+    "run_config": {
+        "model_dir": "models/phishing_distilbert_multilingual",
+        "results_dir": "results",
+        "docs_dir": "docs",
+        "epochs": 50,
+        "batch_size": 16,
+        "learning_rate": 3e-05,
+        "max_length": 128,
+        "random_state": 42
+    }
+}
