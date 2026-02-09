@@ -1,0 +1,155 @@
+metric,value
+total_samples,40158.0
+label_0_count,22624.0
+label_1_count,17534.0
+avg_text_len,1323.9024602818865
+median_text_len,195.0
+p95_text_len,3518.1500000000015
+lang_en_count,22658.0
+lang_ro_count,15000.0
+lang_mixed_count,2500.0
+source_real_enron_count,17511.0
+source_real_sms_collection_count,5147.0
+source_colet blocat la vamă - taxe neplătite (Posta Romana)_count,1150.0
+source_cont accesat de pe un dispozitiv nou_count,900.0
+source_retur bani pentru produs vândut pe OLX_count,900.0
+source_card blocat temporar - necesită deblocare_count,875.0
+source_voucher cadou eMAG/Kaufland/Lidl aniversar_count,831.0
+source_plată suspectă către comerciant extern_count,800.0
+source_oferta angajare part-time 'Like-uri pe TikTok/YouTube'_count,800.0
+source_cod de autorizare tranzacție (3D Secure)_count,794.0
+source_investiții crypto cu profit garantat (Deepfake)_count,763.0
+source_livrare eșuată - adresă incompletă (Fan Courier/Cargus/DPD)_count,750.0
+source_metoda 'Accidentul' (Mama/Tata am nevoie de bani)_count,725.0
+source_poprire cont ANAF / declarație unică_count,701.0
+source_rambursare contribuții sănătate (CNAS)_count,700.0
+source_expirare rovinietă (CNAIR)_count,675.0
+source_alertă RO-ALERT falsă cu link_count,675.0
+source_invitație nuntă fișier infectat_count,625.0
+source_link urmărire colet (Sameday Easybox)_count,600.0
+source_actualizare date personale (Banca Transilvania/BCR/ING/Raiffeisen)_count,508.0
+source_targeted_PHISHING_CEO_FRAUD_count,500.0
+source_targeted_LEGIT_COMPLEX_URLS_count,500.0
+source_targeted_PHISHING_CALL_BACK_count,500.0
+source_targeted_PHISHING_TYPOSQUATTING_count,500.0
+source_targeted_LEGIT_URGENT_WORK_count,500.0
+source_factură scadentă (Enel/E.ON/Digi/Hidroelectrica)_count,350.0
+source_livrare esuata - adresa incompleta (Fan Courier/Cargus/DPD)_count,100.0
+source_actualizare date personale (Banca Transilvania)_count,62.0
+source_cod de autorizare tranzactie (3D Secure)_count,56.0
+source_actualizare date personale (ING)_count,54.0
+source_actualizare date personale (BCR)_count,50.0
+source_colet blocat la vama - taxe neplatite (Posta Romana)_count,50.0
+source_actualizare date personale (Raiffeisen)_count,49.0
+source_factură scadentă (Digi)_count,37.0
+source_factură scadentă (E.ON)_count,36.0
+source_factură scadentă (Enel)_count,32.0
+source_factură scadentă (Hidroelectrica)_count,28.0
+source_poprire cont ANAF / declaratie unica_count,25.0
+source_rambursare contributii sanatate (CNAS)_count,25.0
+source_link urmarire colet (Sameday Easybox)_count,25.0
+source_card blocat temporar - necesita deblocare_count,25.0
+source_factura scadenta (Enel/E.ON/Digi/Hidroelectrica)_count,25.0
+source_poprire cont ANAF_count,17.0
+source_actualizare date personale (General)_count,13.0
+source_metoda 'Accidentul' (Oportunitate - Compensare)_count,10.0
+source_factură scadentă (ANAF)_count,9.0
+source_voucher cadou eMAG_count,8.0
+source_declarație unică_count,7.0
+source_factură scadentă (Generic)_count,7.0
+source_actualizare date personale (ANAF)_count,6.0
+source_voucher cadou Lidl_count,6.0
+source_voucher cadou Kaufland_count,5.0
+source_Security Alert_count,5.0
+source_metoda 'Accidentul' (AUTORITATE - ANAF)_count,4.0
+source_metoda 'Accidentul' (Bancă Legit)_count,3.0
+source_Financial Service_count,3.0
+source_actualizare date personale (Poliție/Autoritate)_count,2.0
+source_Autoritate (Poliție)_count,2.0
+source_factură (Digi)_count,2.0
+source_Curiozitate_count,2.0
+source_metoda 'Accidentul' (AUTORITATE - Poliția)_count,2.0
+source_metoda 'Accidentul' (ANAF Legit)_count,2.0
+source_Autoritate (ANAF)_count,2.0
+source_factură scadentă (Poliție/Autoritate)_count,1.0
+source_factură scadentă (E.ON/Securitate)_count,1.0
+source_factură scadentă (Enel/Confirmare plată)_count,1.0
+source_Logistics Notification_count,1.0
+source_metoda 'Accidentul' (Securitate Bancară Legit)_count,1.0
+source_Tranzacție (Bancară)_count,1.0
+source_factură scadentă (General)_count,1.0
+source_metoda 'Accidentul' (AUTORITATE - Director)_count,1.0
+source_factură scadentă (Hidroelectrica/Rambursare Falsă)_count,1.0
+source_factură scadentă (Enel/Plată eșuată)_count,1.0
+source_factură scadentă (Hidroelectrica/Autoritate)_count,1.0
+source_metoda 'Accidentul' (AUTORITATE - Director/HR)_count,1.0
+source_factură scadentă (ANAF/Utilități)_count,1.0
+source_Securitate (E.ON)_count,1.0
+source_factură scadentă (Director/Amenințare)_count,1.0
+source_actualizare date personale (Autoritate Falsă)_count,1.0
+source_Securitate Cont (Digi)_count,1.0
+source_factură scadentă (Amenințare Legală)_count,1.0
+source_Securitate Cont (Hidroelectrica)_count,1.0
+source_metoda 'Accidentul' (Poliția Legit)_count,1.0
+source_metoda 'Accidentul' (Poliția/Familie)_count,1.0
+source_metoda 'Accidentul' (AUTORITATE - Banca)_count,1.0
+source_Contract (Digi)_count,1.0
+source_Utility Notification_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Retragere rapidă)_count,1.0
+source_metoda 'Accidentul' (AUTORITATE - Ministerul Finanțelor)_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Investiție)_count,1.0
+source_factură scadentă (ANAF/Confirmare fiscală)_count,1.0
+source_factură scadentă (Enel/Actualizare)_count,1.0
+source_metoda 'Accidentul' (AUTORITATE - Parchetul)_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Premiu)_count,1.0
+source_actualizare date personale (Banca Transilvania/BCR)_count,1.0
+source_factură scadentă (General Utility)_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Ajutor financiar)_count,1.0
+source_factură scadentă (E.ON/Urgență)_count,1.0
+source_Informații (Hidroelectrica)_count,1.0
+source_factură scadentă (Hidroelectrica/Informare Tarife)_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Bonus/Voucher)_count,1.0
+source_factură scadentă (Poliție Economică)_count,1.0
+source_Customer Service_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Ajutor/Pachet Social)_count,1.0
+source_factură scadentă (E.ON/Amenințare financiară)_count,1.0
+source_metoda 'Accidentul' (Factură Legit)_count,1.0
+source_factură scadentă (TVA/FISC)_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Marketing real)_count,1.0
+source_factură scadentă (Digi/Autoritate)_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Voucher)_count,1.0
+source_Autoritate (ANPC)_count,1.0
+source_factură scadentă (Digi/Factură emisă)_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Sondaj/Recompensă)_count,1.0
+source_Index (Enel)_count,1.0
+source_metoda 'Accidentul' (AUTORITATE - Banca/Frauda)_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Taxă/Amenințare)_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Falsă alertă bancară)_count,1.0
+source_factură (Digi/Comandă)_count,1.0
+source_Index (Hidroelectrica)_count,1.0
+source_Facturare (E.ON)_count,1.0
+source_actualizare date personale (Raiffeisen/Pretext poștal)_count,1.0
+source_actualizare date personale (Raiffeisen/ANAF)_count,1.0
+source_Cont securitate_count,1.0
+source_factură scadentă (Hidroelectrica/Index)_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Împrumut)_count,1.0
+source_metoda 'Accidentul' (Poștă Legit)_count,1.0
+source_Government Notification_count,1.0
+source_Autoritate (Director)_count,1.0
+source_metoda 'Accidentul' (Director Legit)_count,1.0
+source_metoda 'Accidentul' (OTP Legit)_count,1.0
+source_factură scadentă (E.ON/Login reușit)_count,1.0
+source_factură scadentă (ANAF/Avertizare Generală)_count,1.0
+source_metoda 'Accidentul' (AUTORITATE - Banca Națională)_count,1.0
+source_factură scadentă (Enel/Cod OTP)_count,1.0
+source_factură scadentă (Poliția)_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Reducere/Taxă)_count,1.0
+source_Cont bancar (Autoritate)_count,1.0
+source_Taxe/Autoritate_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Taxă urgentă)_count,1.0
+source_Securitate OTP_count,1.0
+source_factură scadentă (Enel/Autoritate)_count,1.0
+source_metoda 'Accidentul' (Oportunitate - Deblocare fonduri)_count,1.0
+source_Mentenanță (Enel)_count,1.0
+source_factură scadentă (Digi/Marketing)_count,1.0
+source_factură scadentă (ANAF/Autoritate)_count,1.0

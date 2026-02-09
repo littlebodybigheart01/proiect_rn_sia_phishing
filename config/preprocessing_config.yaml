@@ -1,0 +1,32 @@
+dataset:
+  # Dataset unificat (real + sintetic) folosit ca sursă
+  input_path: "data/raw/multilingualdataset.csv"
+
+  # Unde salvăm split-urile
+  output_dir: "data"
+
+  # Numele fișierelor rezultate (consumate de train.py)
+  train_filename: "train.csv"
+  val_filename: "validation.csv"
+  test_filename: "test.csv"
+
+  # Fișierul procesat (curățat + deduplicat) pentru Etapa 3
+  processed_dir: "data/processed"
+  processed_filename: "processed.csv"
+
+split:
+  # 70% train, restul 30% împărțit automat 15/15
+  train_size: 0.7
+
+  # Reproductibilitate
+  random_state: 42
+
+  # Stratificare pe label (0=legit, 1=phishing)
+  stratify_col: "label"
+
+preprocessing:
+  # Informativ (documentație); logica reală se aplică în scripturi
+  lowercase: true
+  remove_urls: false  # CRITIC: păstrăm link-urile pentru detecție
+  remove_duplicates: true
+  min_text_len: 6
