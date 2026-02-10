@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>It's Ham or Spam Extension</title>
+  <style>
+    :root {
+      --bg: #020202;
+      --panel: #070707;
+      --grid: rgba(0, 255, 65, 0.06);
+      --text: #b8ffb8;
+      --muted: #6b8c6b;
+      --safe: #00ff41;
+      --sus: #ffff00;
+      --phish: #ff0033;
+      --cyan: #00ffff;
+    }
+    body {
+      margin: 0;
+      width: 360px;
+      color: var(--text);
+      font-family: "Share Tech Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    header {
+      padding: 12px 14px;
+      border-bottom: 1px solid #0c2a0c;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      border: 1px solid var(--cyan);
+      box-shadow: 0 0 8px rgba(0,255,255,0.35);
+    }
+    .title {
+      font-family: "Orbitron", sans-serif;
+      font-size: 13px;
+      letter-spacing: 1px;
+      color: #ff00ff;
+      text-shadow: 1px 1px 0 #00ffff;
+    }
+    .panel {
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid #0c2a0c;
+      background: #050505;
+      box-shadow: 0 0 10px rgba(0,255,65,0.1);
+    }
+    .label {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .safe { color: var(--safe); }
+    .sus { color: var(--sus); }
+    .phish { color: var(--phish); }
+    .mono { font-size: 12px; color: var(--muted); }
+    .small { font-size: 11px; color: var(--muted); }
+    .row { display: flex; justify-content: space-between; margin-top: 6px; }
+    .btns { display: flex; gap: 8px; margin-top: 10px; }
+    button {
+      flex: 1;
+      padding: 8px;
+      border-radius: 0px;
+      border: 1px solid var(--cyan);
+      background: transparent;
+      color: var(--cyan);
+      cursor: pointer;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-family: "Orbitron", sans-serif;
+      font-size: 11px;
+    }
+    button:hover {
+      background: var(--cyan);
+      color: #000;
+      box-shadow: 0 0 8px var(--cyan);
+    }
+    select {
+      width: 100%;
+      padding: 6px;
+      border-radius: 0px;
+      border: 1px solid #0c2a0c;
+      background: #000;
+      color: var(--text);
+      margin-top: 6px;
+      font-family: "Share Tech Mono", monospace;
+    }
+    .linkbtn { width: 100%; margin-top: 8px; }
+    .status { margin-top: 8px; font-size: 11px; color: var(--muted); }
+    .error { color: var(--phish); font-size: 11px; }
+  </style>
+</head>
+<body>
+  <header>
+    <img id="logo" class="logo" alt="logo" />
+    <div class="title">IT'S HAM OR SPAM EXTENSION</div>
+  </header>
+
+  <div class="panel">
+    <div class="small">MODEL SELECT</div>
+    <select id="model-select">
+      <option value="auto">AUTO</option>
+      <option value="standard">STANDARD</option>
+      <option value="optimized">OPTIMIZED</option>
+    </select>
+    <button id="open-app" class="linkbtn">OPEN MAIN APP</button>
+  </div>
+
+  <div id="content" class="panel">
+    <div class="label">NO SCAN YET</div>
+    <div class="small">Select text, right click → Scan for spam</div>
+  </div>
+
+  <audio id="alert-audio" src="avast.mp3"></audio>
+
+  <script src="popup.js"></script>
+</body>
+</html>

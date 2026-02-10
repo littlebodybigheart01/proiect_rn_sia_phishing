@@ -1,0 +1,8 @@
+{
+  "avg_latency_ms": 0.005385789991123602,
+  "runs": 100,
+  "warmup_runs": 10,
+  "model_path": "models/final_model.tflite",
+  "model_dir": "models/baseline_text_model_infer",
+  "vectorizer_json": "models/baseline_text_vectorizer.json"
+}

@@ -1,0 +1,16 @@
+model:
+  architecture: distilbert-base-multilingual-cased
+  selected_variant: optimized
+  optimized_model_h5: models/optimized_model.h5
+  optimized_model_dir: models/phishing_distilbert_multilingual_optimized
+
+training:
+  learning_rate: 5.0e-5
+  batch_size: 16
+  max_sequence_length: 128
+  random_state: 42
+
+selection:
+  criterion: f1_macro
+  source_file: results/optimization_experiments.csv
+  selected_experiment: lr_5e-5

@@ -1,0 +1,16 @@
+{
+  "test_accuracy": 0.9619853917662683,
+  "test_precision_macro": 0.9632906617363457,
+  "test_recall_macro": 0.959545137807493,
+  "test_f1_macro": 0.9612150043121899,
+  "epochs_ran": 9,
+  "train_time_sec": 26.368855439999606,
+  "artifacts": {
+    "model_dir": "models/baseline_text_model",
+    "keras_path": "models/baseline_text_model.keras",
+    "tflite_model_dir": "models/baseline_text_model_infer",
+    "vectorizer_json": "models/baseline_text_vectorizer.json",
+    "confusion_matrix_png": "docs/confusion_matrix_baseline.png",
+    "metrics_json": "results/baseline_metrics.json"
+  }
+}

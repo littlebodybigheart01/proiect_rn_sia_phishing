@@ -1,0 +1,67 @@
+ts,text,input_type,lang,model_path,score,pred_label,threshold_low,threshold_high,latency_ms,user_action,final_label,src
+2026-01-17T19:38:07,"Totuși, faptul că ți se pare lent are o explicație tehnică legată de cum este structurat codul și de timpul de compilare",text,ro,models/phishing_distilbert_multilingual_optimized,0.0011941447155550122,0,0.25,0.75,760.4861900035758,correct,0,user_feedback
+2026-01-27T22:47:25,Your Amazon account has been locked. Click here to unlock.,text,ro,models/phishing_distilbert_multilingual_optimized,0.998212456703186,1,0.25,0.75,1851.9817829999283,correct,1,user_feedback
+2026-02-02T23:22:19,"Salut,
+
+Sunt într-o ședință și nu pot vorbi la telefon. Am nevoie să faci o plată urgentă către un furnizor nou până la sfârșitul zilei. Este critic pentru proiectul curent.
+
+Răspunde-mi imediat ce vezi acest email și îți trimit detaliile facturii. Vreau discreție totală, nu discuta cu nimeni din contabilitate încă.
+
+Sent from my iPhone",text,ro,models/phishing_distilbert_multilingual_optimized,0.9984420537948608,1,0.25,0.75,536.8984159999854,correct,1,user_feedback
+2026-02-02T23:22:47,"Ai castigat un iPhone 15 Pro Max nou nout!!
+
+Adresa ta de email a fost selectata aleatoriu in tombola noastra anuala. Nu trebuie decat sa raspunzi la acest sondaj scurt si sa platesti transportul pentru a intra in posesia premiului.
+
+REVENDICA ACUM: [Link: http://castigator-norocos-premii.info/claim]
+
+Grabeste-te, oferta expira in 10 minute!",text,ro,models/phishing_distilbert_multilingual_optimized,0.9999064803123474,1,0.25,0.75,472.9264540000031,correct,1,user_feedback
+2026-02-02T23:23:06,"Salut,
+
+Curierul a incercat sa livreze pachetul tau astazi, dar adresa a fost incompleta. Pachetul s-a intors la depozitul central.
+
+Trebuie sa achiti o taxa de reprocesare de 4.99 RON pentru a reprograma livrarea.
+
+Click aici pentru plata: [Link: http://livrare-rapida-status.com/pay]
+
+Daca nu platesti in 48 de ore, coletul va fi returnat expeditorului.",text,ro,models/phishing_distilbert_multilingual_optimized,0.9999066591262817,1,0.25,0.75,482.04072999999426,correct,1,user_feedback
+2026-02-02T23:24:57,"Stimate client,
+
+Am detectat o activitate neobisnuită în contul dvs. bancar in data de 02.02.2026. Din motive de securitate, accesul a fost limitat temporar.
+
+Pentru a debloca fondurile, este obligatoriu să vă confirmați identitatea în urmatoarele 24 de ore accesând link-ul securizat de mai jos:
+
+[Link: http://banca-ta-suport-clienti-verify.xyz]
+
+Nerespectarea acestui pas va duce la inchiderea definitiva a contului.
+
+Echipa de Securitate",text,ro,models/phishing_distilbert_multilingual_optimized,0.9998884797096252,1,0.25,0.75,485.4376019999336,correct,1,user_feedback
+2026-02-02T23:25:59,"Dear Employee,
+
+Due to the recent adjustments in our benefits policy, your payroll structure has been modified effective immediately.
+
+Please review the attached document or login to the employee portal below to acknowledge the changes before the next pay cycle.
+
+[Link: http://hr-portal-secure-login-update.net/auth]
+
+Failure to confirm these details may result in a delay in your direct deposit.
+
+Regards, Human Resources Department",text,ro,models/phishing_distilbert_multilingual_optimized,0.989855945110321,1,0.25,0.75,488.169464000066,correct,1,user_feedback
+2026-02-02T23:26:52,"We noticed a login attempt to your Microsoft 365 account from an unrecognized device in Lagos, Nigeria.
+
+Device: iPhone 13 IP Address: 192.168.x.x Time: 2:45 AM UTC
+
+If this wasn't you, please secure your account immediately to prevent data loss.
+
+[Link: http://microsoft-safety-check-account.xyz/verify]
+
+The Security Team",text,ro,models/phishing_distilbert_multilingual_optimized,0.9998771548271179,1,0.25,0.75,476.4357609999479,correct,1,user_feedback
+2026-02-10T11:39:10,"Notificare: Datorii neachitate către bugetul de stat Mesaj: Stimate contribuabil, În urma verificărilor efectuate, figurați cu o sumă restantă de 450 RON. Pentru a evita poprirea conturilor bancare, vă rugăm să accesați portalul securizat și să efectuați plata integrală în termen de 24 de ore. [Link: http://anaf-plati-online-secure.ro/login] Direcția Generală a Finanțelor Publice.",text,ro,models/phishing_distilbert_multilingual_optimized,0.9998598098754883,1,0.25,0.75,731.1682610002208,correct,1,user_feedback
+2026-02-10T12:32:29,"Notificare: Datorii neachitate către bugetul de stat Mesaj: Stimate contribuabil, În urma verificărilor efectuate, figurați cu o sumă restantă de 450 RON. Pentru a evita poprirea conturilor bancare, vă rugăm să accesați portalul securizat și să efectuați plata integrală în termen de 24 de ore. [Link: http://anaf-plati-online-secure.ro/login] Direcția Generală a Finanțelor Publice.",text,ro,models/phishing_distilbert_multilingual_optimized,0.9998598098754883,1,0.25,0.75,62.46283400014363,correct,1,user_feedback
+2026-02-10T12:34:04,"Re: Întrebare legată de proiectul de licență Mesaj: Salut An prinit draftul tău pentru capitolul 3. În nare arată bine dar te rog Să revizuiesti bibliografia, este fornatată corect. Ne puten vedea niercuri la ora 14:00 în laborator pentru discuta detaliile tehnice? Nunai bine Prof Ionescu",ocr,ro,models/phishing_distilbert_multilingual,0.0008239433518610895,0,0.25,0.75,60.028130000318924,correct,0,user_feedback
+2026-02-10T12:35:29,"Re: Întrebare legată de proiectul de licență Mesaj: Salut An prinit draftul tău pentru capitolul 3. În nare arată bine dar te rog Să revizuiesti bibliografia, este fornatată corect. Ne puten vedea niercuri la ora 14:00 în laborator pentru discuta detaliile tehnice? Nunai bine Prof Ionescu",ocr,ro,models/phishing_distilbert_multilingual_optimized,0.00013423876953311265,0,0.25,0.75,58.10939499951928,correct,0,user_feedback
+2026-02-10T12:43:21,"Întrebare legată de proiectul de licență Mesaj: Salut, Am primit draftul tău pentru capitolul 3. În mare arată bine, dar te rog să revizuiești bibliografia, nu este formatată corect. Ne putem vedea miercuri la ora 14:00 în laborator pentru a discuta detaliile tehnice? Numai bine, Prof. Ionescu",text,ro,models/phishing_distilbert_multilingual_optimized,9.76815790636465e-05,0,0.25,0.75,334.6506279995083,correct,0,user_feedback
+2026-02-10T12:55:17,"Notificare: Datorii neachitate către bugetul de stat Mesaj: Stimate contribuabil, În urma verificărilor efectuate, figurați cu o sumă restantă de 450 RON. Pentru a evita poprirea conturilor bancare, vă rugăm să accesați portalul securizat și să efectuați plata integrală în termen de 24 de ore. [Link: http://anaf-plati-online-secure.ro/login] Direcția Generală a Finanțelor Publice.",text,ro,models/phishing_distilbert_multilingual_optimized,0.9998598098754883,1,0.25,0.75,332.8942400003143,correct,1,user_feedback
+2026-02-10T13:19:38,"Notificare: Datorii neachitate către bugetul de stat Mesaj: Stimate contribuabil, În urma verificărilor efectuate, figurați cu o sumă restantă de 450 RON. Pentru a evita poprirea conturilor bancare, vă rugăm să accesați portalul securizat și să efectuați plata integrală în termen de 24 de ore. [Link: http://anaf-plati-online-secure.ro/login] Direcția Generală a Finanțelor Publice.",text,ro,models/phishing_distilbert_multilingual_optimized,0.9998598098754883,1,0.25,0.75,979.7622099999899,correct,1,user_feedback
+2026-02-10T13:25:47,"URGENT: Discrepancy in your payroll information Body: Dear Employee, We noticed an error in your direct deposit information for the upcoming pay cycle. Your salary payment has been put on hold. Please log in to the employee portal immediately to verify your bank details to ensure you get paid on Friday. [Link: http://hr-portal-employee-verify.net] Human Resources Dept.",text,ro,models/phishing_distilbert_multilingual_optimized,0.9998923540115356,1,0.25,0.75,330.45340399996803,correct,1,user_feedback
+2026-02-10T13:35:33,"Notificare: Datorii neachitate către bugetul de stat Mesaj: Stimate contribuabil, În urma verificărilor efectuate, figurați cu o sumă restantă de 450 RON. Pentru a evita poprirea conturilor bancare, vă rugăm să accesați portalul securizat și să efectuați plata integrală în termen de 24 de ore. [Link: http://anaf-plati-online-secure.ro/login] Direcția Generală a Finanțelor Publice.",text,ro,models/phishing_distilbert_multilingual_optimized,0.9998598098754883,1,0.25,0.75,474.2012980000254,correct,1,user_feedback
+2026-02-10T13:36:01,"Re: Întrebare legată de proiectul de licență Mesaj: Salut An prinit draftul tău pentru capitolul 3. În nare arată bine dar te rog Să revizuiesti bibliografia, este fornatată corect. Ne puten vedea niercuri la ora 14:00 în laborator pentru discuta detaliile tehnice? Nunai bine Prof Ionescu",ocr,ro,models/phishing_distilbert_multilingual_optimized,0.00013423876953311265,0,0.25,0.75,52.28115600016281,correct,0,user_feedback

@@ -1,0 +1,23 @@
+{
+    "timestamp": "2026-01-17T19:34:29",
+    "best_experiment": {
+        "accuracy": 0.9887118193891102,
+        "f1_macro": 0.9885183338578535,
+        "precision_macro": 0.9889131055333038,
+        "recall_macro": 0.988142125110069,
+        "exp": "lr_5e-5",
+        "learning_rate": 5e-05,
+        "batch_size": 16,
+        "epochs": 10
+    },
+    "test_accuracy": 0.9887118193891102,
+    "test_f1_macro": 0.9885183338578535,
+    "test_precision_macro": 0.9889131055333038,
+    "test_recall_macro": 0.988142125110069,
+    "artifacts": {
+        "optimization_experiments_csv": "results/optimization_experiments.csv",
+        "confusion_matrix_optimized_png": "docs/confusion_matrix_optimized.png",
+        "optimized_model_h5": "models/optimized_model.h5",
+        "optimized_model_dir": "models/phishing_distilbert_multilingual_optimized"
+    }
+}
