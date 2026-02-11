@@ -4,6 +4,10 @@ import uuid
 from typing import Optional, Tuple
 
 os.environ["TF_USE_LEGACY_KERAS"] = "1"
+# Keep API stable for browser extension by defaulting to CPU inference.
+# Set API_USE_GPU=1 only if you explicitly want GPU for this process.
+if os.getenv("API_USE_GPU", "0") != "1":
+    os.environ.setdefault("CUDA_VISIBLE_DEVICES", "-1")
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -32,6 +36,18 @@ def resolve_model_path() -> str:
     return DEFAULT_MODEL_PATH
 
 
+def normalize_choice(choice: Optional[str]) -> str:
+    value = (choice or "auto").strip().lower()
+    aliases = {
+        "baseline": "standard",
+        "default": "standard",
+        "normal": "standard",
+        "optimised": "optimized",
+        "opt": "optimized",
+    }
+    return aliases.get(value, value)
+
+
 def load_model(path: str):
     tokenizer = DistilBertTokenizer.from_pretrained(path)
     model = TFDistilBertForSequenceClassification.from_pretrained(path)
@@ -43,19 +59,34 @@ MODEL_CACHE: dict[str, Tuple[object, object]] = {}
 
 def get_model(path: str):
     if path not in MODEL_CACHE:
+        # Keep only one loaded model in memory to avoid OOM in long sessions.
+        if MODEL_CACHE:
+            MODEL_CACHE.clear()
+            tf.keras.backend.clear_session()
         MODEL_CACHE[path] = load_model(path)
     return MODEL_CACHE[path]
 
 
 def resolve_choice(choice: Optional[str]) -> str:
-    if choice in (None, "", "auto"):
+    normalized = normalize_choice(choice)
+    if normalized == "auto":
         return resolve_model_path()
-    if choice == "standard":
-        return DEFAULT_MODEL_PATH
-    if choice == "optimized":
-        if not os.path.isdir(OPTIMIZED_MODEL_DIR):
-            raise HTTPException(status_code=400, detail="Optimized model not available")
-        return OPTIMIZED_MODEL_DIR
+    if normalized == "standard":
+        if os.path.isdir(DEFAULT_MODEL_PATH):
+            return DEFAULT_MODEL_PATH
+        fallback = resolve_model_path()
+        if os.path.isdir(fallback):
+            return fallback
+        raise HTTPException(status_code=400, detail="Standard model not available")
+    if normalized == "optimized":
+        if os.path.isdir(OPTIMIZED_MODEL_DIR):
+            return OPTIMIZED_MODEL_DIR
+        if os.path.isdir(DEFAULT_MODEL_PATH):
+            return DEFAULT_MODEL_PATH
+        fallback = resolve_model_path()
+        if os.path.isdir(fallback):
+            return fallback
+        raise HTTPException(status_code=400, detail="Optimized model not available")
     raise HTTPException(status_code=400, detail="Invalid model choice")
 
 
@@ -135,9 +166,14 @@ def health():
     return {
         "status": "ok",
         "default_model": resolve_model_path(),
+        "api_use_gpu": os.getenv("API_USE_GPU", "0") == "1",
         "available_models": {
             "standard": os.path.isdir(DEFAULT_MODEL_PATH),
             "optimized": os.path.isdir(OPTIMIZED_MODEL_DIR),
+        },
+        "model_paths": {
+            "standard": DEFAULT_MODEL_PATH,
+            "optimized": OPTIMIZED_MODEL_DIR,
         },
     }
 
@@ -155,7 +191,8 @@ def scan(req: ScanRequest):
     if low >= high:
         raise HTTPException(status_code=400, detail="threshold_low must be < threshold_high")
 
-    model_path = resolve_choice(req.model)
+    normalized_model = normalize_choice(req.model)
+    model_path = resolve_choice(normalized_model)
 
     try:
         score, latency_ms = predict(text, model_path)
@@ -170,6 +207,7 @@ def scan(req: ScanRequest):
         "score": score,
         "label": label,
         "latency_ms": latency_ms,
+        "model_choice": normalized_model,
         "model_path": model_path,
         "truncated": len(text) == MAX_INPUT_CHARS,
     }

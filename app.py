@@ -19,6 +19,8 @@ import numpy as np
 from PIL import Image
 import easyocr
 import pandas as pd
+import requests
+import streamlit.components.v1 as components
 
 
 # =========================
@@ -44,6 +46,11 @@ CONF_MAT_OPT_PATH = "docs/confusion_matrix_optimized.png"
 CONF_MAT_BASE_PATH = "docs/confusion_matrix.png"
 CONF_MAT_BASELINE_PATH = "docs/confusion_matrix_baseline.png"
 LOSS_CURVE_PATH = "docs/loss_curve.png"
+BRITNEY_IMAGE_URL = (
+    "https://hips.hearstapps.com/elle-it/assets/15/37/original/"
+    "original-388fc732-8447-11e6-8bc5-630f492dd176fotogallery-10-anni-di-britney-2001-781475-1-ita-it-2001-jpg.jpg"
+)
+BRITNEY_TRACK_LOOKUP_URL = "https://itunes.apple.com/lookup?id=521738935"
 
 st.set_page_config(
     page_title="HAM OR SPAM PROTOCOL",
@@ -58,6 +65,7 @@ defaults = {
     "last_latency_ms": None,
     "last_input_type": None,      # "text" / "ocr"
     "history": [],                # lista de evenimente inferență (runtime)
+    "play_britney_preview": False,
 }
 for k, v in defaults.items():
     if k not in st.session_state:
@@ -102,24 +110,32 @@ ICONS = {
 
 TEXTS = {
     "ro": {
-        "sidebar_title": "Setări Sistem",
-        "tab_text": "TEXT INPUT",
-        "tab_image": "IMG SCAN (OCR)",
-        "tab_stats": "STATS",
-        "input_label": ">> INTRODU FLUXUL DE DATE:",
-        "upload_label": ">> UPLOAD SCREENSHOT:",
-        "scan_btn": ">> INITIATE SCAN PROTOCOL <<",
+        "sidebar_title": "Setari Sistem",
+        "tab_text": "TEXT",
+        "tab_image": "SCANARE IMAGINE (OCR)",
+        "tab_stats": "STATISTICI",
+        "input_label": ">> INTRODU TEXTUL PENTRU ANALIZA:",
+        "upload_label": ">> INCARCA SCREENSHOT:",
+        "scan_btn": ">> PORNESTE SCANAREA <<",
         "ocr_success": ">> DATE EXTRASE:",
-        "error_model": ">> EROARE SISTEM: MODELUL LIPSEȘTE.",
-        "error_empty": ">> EROARE: NU EXISTĂ DATE.",
+        "error_model": ">> EROARE SISTEM: MODELUL LIPSESTE.",
+        "error_empty": ">> EROARE: NU EXISTA DATE.",
         "feedback_title": ">> VALIDARE HUMAN-IN-THE-LOOP:",
-        "feedback_ok": "[ CORRECT ]",
-        "feedback_bad": "[ WRONG ]",
-        "feedback_success": ">> DATA LOGGED.",
+        "feedback_ok": "[ CORECT ]",
+        "feedback_bad": "[ GRESIT ]",
+        "feedback_success": ">> FEEDBACK SALVAT.",
         "stats_title": "STATISTICI ÎN TIMP REAL",
-        "res_phishing": {"title": "CRITICAL THREAT DETECTED", "prob": "PROBABILITY:", "status": "STATUS: MALICIOUS"},
-        "res_legit": {"title": "SYSTEM SECURE", "prob": "INTEGRITY:", "status": "STATUS: VERIFIED"},
-        "res_suspect": {"title": "UNKNOWN SIGNATURE", "prob": "RISK:", "status": "STATUS: SUSPICIOUS"},
+        "res_phishing": {"title": "AMENINTARE CRITICA DETECTATA", "prob": "PROBABILITATE:", "status": "STATUS: MALITIOS"},
+        "res_legit": {"title": "MESAJ SIGUR", "prob": "INTEGRITATE:", "status": "STATUS: VERIFICAT"},
+        "res_suspect": {"title": "SEMNATURA NECUNOSCUTA", "prob": "RISC:", "status": "STATUS: SUSPECT"},
+        "subtitle": "Detectie phishing in timp real pentru text si OCR.",
+        "ocr_spinner": "SE PROCESEAZA OCR...",
+        "ocr_failed": "OCR A ESUAT.",
+        "model_selected": "Model selectat",
+        "model_active_opt": "Model activ: OPTIMIZED",
+        "model_active_base": "Model activ: STANDARD",
+        "reset_stats": "Reseteaza statisticile sesiunii",
+        "threshold_error": "threshold_low trebuie sa fie < threshold_high",
     },
     "en": {
         "sidebar_title": "System Config",
@@ -140,6 +156,14 @@ TEXTS = {
         "res_phishing": {"title": "CRITICAL THREAT DETECTED", "prob": "PROBABILITY:", "status": "STATUS: MALICIOUS"},
         "res_legit": {"title": "SYSTEM SECURE", "prob": "INTEGRITY:", "status": "STATUS: VERIFIED"},
         "res_suspect": {"title": "UNKNOWN SIGNATURE", "prob": "RISK:", "status": "STATUS: SUSPICIOUS"},
+        "subtitle": "Realtime phishing detection for text and OCR input.",
+        "ocr_spinner": "OCR PROCESSING...",
+        "ocr_failed": "OCR FAILED.",
+        "model_selected": "Selected model",
+        "model_active_opt": "Model active: OPTIMIZED",
+        "model_active_base": "Model active: STANDARD",
+        "reset_stats": "Reset session statistics",
+        "threshold_error": "threshold_low must be < threshold_high",
     },
 }
 
@@ -311,6 +335,83 @@ def load_ocr():
     return easyocr.Reader(["ro", "en"], gpu=False)
 
 
+@st.cache_data(ttl=86400)
+def get_britney_preview():
+    try:
+        response = requests.get(BRITNEY_TRACK_LOOKUP_URL, timeout=3)
+        payload = response.json()
+        if payload.get("resultCount", 0) > 0:
+            track = payload["results"][0]
+            cover = track.get("artworkUrl100", BRITNEY_IMAGE_URL).replace("100x100bb", "600x600bb")
+            preview = track.get("previewUrl")
+            return cover, preview
+    except Exception:
+        pass
+    return BRITNEY_IMAGE_URL, None
+
+
+def render_britney_preview(cover_url: str, preview_url: str):
+    components.html(
+        f"""
+        <style>
+          .egg-card {{
+            background: radial-gradient(circle at top, rgba(255,0,255,0.2), rgba(0,0,0,0.9));
+            border: 2px solid #ff00ff;
+            box-shadow: 0 0 24px rgba(255,0,255,0.45), inset 0 0 24px rgba(0,255,255,0.15);
+            padding: 14px;
+            margin: 10px 0;
+            color: #e8ffe8;
+            font-family: "Share Tech Mono", monospace;
+            text-align: center;
+          }}
+          .egg-title {{
+            font-family: "Orbitron", sans-serif;
+            letter-spacing: 1px;
+            color: #ff00ff;
+            text-shadow: 0 0 8px rgba(255,0,255,0.8);
+            margin-bottom: 10px;
+            font-size: 16px;
+          }}
+          .egg-sub {{
+            color: #9ef0ff;
+            opacity: 0.95;
+            margin-bottom: 10px;
+            font-size: 12px;
+          }}
+          .cover-wrap {{
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+          }}
+          .cover {{
+            width: 150px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 16px rgba(0,255,255,0.5);
+            border-radius: 6px;
+            animation: pulse 1.8s infinite;
+          }}
+          @keyframes pulse {{
+            0% {{ transform: scale(1); }}
+            50% {{ transform: scale(1.03); }}
+            100% {{ transform: scale(1); }}
+          }}
+          audio {{
+            width: 96%;
+            margin-top: 6px;
+            filter: hue-rotate(270deg) saturate(1.35);
+          }}
+        </style>
+        <div class="egg-card">
+          <div class="egg-title">UNLOCKED: BRITNEY SPEARS</div>
+          <div class="egg-sub">Gimme More (preview) started automatically</div>
+          <div class="cover-wrap"><img class="cover" src="{cover_url}" /></div>
+          <audio autoplay controls src="{preview_url}"></audio>
+        </div>
+        """,
+        height=350,
+    )
+
+
 def predict_func(text: str, tokenizer, model):
     enc = tokenizer([text.lower()], truncation=True, padding=True, max_length=128, return_tensors="tf")
     t0 = time.perf_counter()
@@ -400,6 +501,10 @@ def save_feedback(
     pd.DataFrame([row]).to_csv(FEEDBACK_FILE, mode="a", header=not os.path.exists(FEEDBACK_FILE), index=False)
 
 
+def L(ro_text: str, en_text: str) -> str:
+    return ro_text if lang == "ro" else en_text
+
+
 # =========================
 # 4) SIDEBAR 
 # =========================
@@ -411,13 +516,13 @@ with st.sidebar:
 
     st.markdown(f"### {T['sidebar_title']}")
 
-    st.caption("State Machine thresholds")
-    th_low = st.slider("SAFE threshold (low)", 0.00, 0.49, 0.25, 0.01)
-    th_high = st.slider("PHISHING threshold (high)", 0.51, 1.00, 0.75, 0.01)
+    st.caption(L("Praguri State Machine", "State Machine thresholds"))
+    th_low = st.slider(L("Prag SAFE (low)", "SAFE threshold (low)"), 0.00, 0.49, 0.25, 0.01)
+    th_high = st.slider(L("Prag PHISHING (high)", "PHISHING threshold (high)"), 0.51, 1.00, 0.75, 0.01)
     if th_low >= th_high:
-        st.warning("threshold_low trebuie să fie < threshold_high")
+        st.warning(T["threshold_error"])
 
-    st.caption("Model")
+    st.caption(L("Model", "Model"))
     available_models = [
         ("Standard", DEFAULT_MODEL_PATH),
     ]
@@ -427,29 +532,35 @@ with st.sidebar:
     labels = [item[0] for item in available_models]
     paths = [item[1] for item in available_models]
     default_index = paths.index(MODEL_PATH) if MODEL_PATH in paths else 0
-    choice = st.selectbox("Model selectat", labels, index=default_index)
+    choice = st.selectbox(T["model_selected"], labels, index=default_index)
     MODEL_PATH = paths[labels.index(choice)]
 
     st.code(MODEL_PATH, language="text")
     if os.path.basename(MODEL_PATH) == os.path.basename(OPTIMIZED_MODEL_DIR):
-        st.success("Model activ: OPTIMIZED")
+        st.success(T["model_active_opt"])
     else:
-        st.info("Model activ: BASELINE")
+        st.info(T["model_active_base"])
 
-    if st.button("Reset realtime stats (session)"):
+    if st.button(T["reset_stats"]):
         st.session_state.history = []
         st.session_state.last_text = None
         st.session_state.last_score = None
         st.session_state.last_latency_ms = None
         st.session_state.last_input_type = None
-
-
 # =========================
 # 5) UI: TITLU + TAB-URI
 # =========================
 
 st.markdown("<h1>IT'S HAM OR SPAM?</h1>", unsafe_allow_html=True)
-st.caption("Realtime phishing detection for text and OCR input.")
+st.caption(T["subtitle"])
+st.markdown(
+    f"""
+    <div style="border:2px solid #ff00ff;padding:6px;background:#000;box-shadow:0 0 16px rgba(255,0,255,0.35);margin-bottom:10px;">
+      <img src="{BRITNEY_IMAGE_URL}" style="width:100%;display:block;" />
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 tab1, tab2, tab3 = st.tabs([T["tab_text"], T["tab_image"], T["tab_stats"]])
 
@@ -467,7 +578,7 @@ with tab2:
     if up:
         img = Image.open(up)
         st.image(img, use_container_width=True)
-        with st.spinner("OCR PROCESSING..."):
+        with st.spinner(T["ocr_spinner"]):
             try:
                 res_list = load_ocr().readtext(np.array(img), detail=0)
                 res = " ".join(res_list).strip()
@@ -477,7 +588,7 @@ with tab2:
                     current_input = res
                     input_type = "ocr"
             except Exception:
-                st.error("OCR FAILED.")
+                st.error(T["ocr_failed"])
 
 
 # =========================
@@ -496,6 +607,7 @@ else:
             st.session_state.last_score = score
             st.session_state.last_latency_ms = latency_ms
             st.session_state.last_input_type = input_type or "text"
+            st.session_state.play_britney_preview = "britney spears" in current_input.lower()
 
             # update realtime history
             bucket = decide_bucket(score, th_low, th_high)
@@ -546,15 +658,23 @@ else:
         st.progress(min(max(sc, 0.0), 1.0))
         st.caption(f"score={sc:.4f} | thresholds low={th_low:.2f}, high={th_high:.2f} | model={MODEL_PATH}")
 
+        if st.session_state.play_britney_preview:
+            cover_url, preview_url = get_britney_preview()
+            if preview_url:
+                render_britney_preview(cover_url, preview_url)
+            else:
+                st.info(L("Preview-ul Britney nu este disponibil momentan.", "Britney preview is currently unavailable."))
+            st.session_state.play_britney_preview = False
+
         # Realtime stats inline (după fiecare mesaj)
         with st.expander(T["stats_title"], expanded=True):
             a, b, c, d = st.columns(4)
-            a.metric("Session scans", rt["count"])
-            b.metric("Avg score", f"{rt['avg_score']:.3f}" if rt["avg_score"] is not None else "n/a")
-            c.metric("Avg latency (ms)", f"{rt['avg_latency']:.2f}" if rt["avg_latency"] is not None else "n/a")
-            d.metric("Latency p90 (ms)", f"{rt['p90_latency']:.2f}" if rt["p90_latency"] is not None else "n/a")
+            a.metric(L("Scanari sesiune", "Session scans"), rt["count"])
+            b.metric(L("Scor mediu", "Avg score"), f"{rt['avg_score']:.3f}" if rt["avg_score"] is not None else "n/a")
+            c.metric(L("Latenta medie (ms)", "Avg latency (ms)"), f"{rt['avg_latency']:.2f}" if rt["avg_latency"] is not None else "n/a")
+            d.metric(L("Latenta p90 (ms)", "Latency p90 (ms)"), f"{rt['p90_latency']:.2f}" if rt["p90_latency"] is not None else "n/a")
 
-            st.write("Bucket counts:", rt["bucket_counts"])
+            st.write(L("Numar pe clase:", "Bucket counts:"), rt["bucket_counts"])
             if st.session_state.history:
                 st.dataframe(pd.DataFrame(st.session_state.history).tail(10), use_container_width=True)
 
@@ -611,28 +731,28 @@ with tab3:
     # last inference
     if st.session_state.last_score is not None:
         c1, c2, c3 = st.columns(3)
-        c1.metric("Last score", f"{float(st.session_state.last_score):.4f}")
-        c2.metric("Last latency (ms)", f"{float(st.session_state.last_latency_ms or 0.0):.2f}")
-        c3.metric("Last input", st.session_state.last_input_type or "n/a")
+        c1.metric(L("Ultimul scor", "Last score"), f"{float(st.session_state.last_score):.4f}")
+        c2.metric(L("Ultima latenta (ms)", "Last latency (ms)"), f"{float(st.session_state.last_latency_ms or 0.0):.2f}")
+        c3.metric(L("Ultimul input", "Last input"), st.session_state.last_input_type or "n/a")
     else:
-        st.info("No inference yet in this session.")
+        st.info(L("Nu exista inferente in aceasta sesiune.", "No inference yet in this session."))
 
     st.divider()
 
     # realtime (session) stats
     rt = compute_realtime_stats(st.session_state.history)
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Session scans", rt["count"])
-    c2.metric("Avg score", f"{rt['avg_score']:.3f}" if rt["avg_score"] is not None else "n/a")
-    c3.metric("Latency p50 (ms)", f"{rt['p50_latency']:.2f}" if rt["p50_latency"] is not None else "n/a")
-    c4.metric("Latency p90 (ms)", f"{rt['p90_latency']:.2f}" if rt["p90_latency"] is not None else "n/a")
-    st.write("Bucket counts:", rt["bucket_counts"])
+    c1.metric(L("Scanari sesiune", "Session scans"), rt["count"])
+    c2.metric(L("Scor mediu", "Avg score"), f"{rt['avg_score']:.3f}" if rt["avg_score"] is not None else "n/a")
+    c3.metric(L("Latenta p50 (ms)", "Latency p50 (ms)"), f"{rt['p50_latency']:.2f}" if rt["p50_latency"] is not None else "n/a")
+    c4.metric(L("Latenta p90 (ms)", "Latency p90 (ms)"), f"{rt['p90_latency']:.2f}" if rt["p90_latency"] is not None else "n/a")
+    st.write(L("Numar pe clase:", "Bucket counts:"), rt["bucket_counts"])
 
-    with st.expander("Session history (last 25)"):
+    with st.expander(L("Istoric sesiune (ultimele 25)", "Session history (last 25)")):
         if st.session_state.history:
             st.dataframe(pd.DataFrame(st.session_state.history).tail(25), use_container_width=True)
         else:
-            st.write("Empty.")
+            st.write(L("Gol.", "Empty."))
 
     st.divider()
 
@@ -656,10 +776,10 @@ with tab3:
             )
 
     if split_stats:
-        st.markdown("### Dataset splits")
+        st.markdown(f"### {L('Split-uri dataset', 'Dataset splits')}")
         st.dataframe(pd.DataFrame(split_stats), use_container_width=True)
     else:
-        st.caption("Dataset splits not found (expected data/train|validation|test/*.csv).")
+        st.caption(L("Split-urile dataset nu au fost gasite (asteptat data/train|validation|test/*.csv).", "Dataset splits not found (expected data/train|validation|test/*.csv)."))
 
     st.divider()
 
@@ -669,13 +789,13 @@ with tab3:
         st.markdown("### results/test_metrics.json")
         st.json(tm)
     else:
-        st.caption("results/test_metrics.json not found.")
+        st.caption(L("results/test_metrics.json nu a fost gasit.", "results/test_metrics.json not found."))
 
     if os.path.exists(CONF_MAT_BASE_PATH):
         st.caption("docs/confusion_matrix.png")
         st.image(CONF_MAT_BASE_PATH, use_container_width=True)
     else:
-        st.caption("docs/confusion_matrix.png not found.")
+        st.caption(L("docs/confusion_matrix.png nu a fost gasit.", "docs/confusion_matrix.png not found."))
 
     st.divider()
 
@@ -685,13 +805,13 @@ with tab3:
         st.markdown("### results/baseline_metrics.json")
         st.json(bm)
     else:
-        st.caption("results/baseline_metrics.json not found.")
+        st.caption(L("results/baseline_metrics.json nu a fost gasit.", "results/baseline_metrics.json not found."))
 
     if os.path.exists(CONF_MAT_BASELINE_PATH):
         st.caption("docs/confusion_matrix_baseline.png")
         st.image(CONF_MAT_BASELINE_PATH, use_container_width=True)
     else:
-        st.caption("docs/confusion_matrix_baseline.png not found.")
+        st.caption(L("docs/confusion_matrix_baseline.png nu a fost gasit.", "docs/confusion_matrix_baseline.png not found."))
 
     st.divider()
 
@@ -701,7 +821,7 @@ with tab3:
         st.markdown("### results/tflite_latency.json")
         st.json(lt)
     else:
-        st.caption("results/tflite_latency.json not found.")
+        st.caption(L("results/tflite_latency.json nu a fost gasit.", "results/tflite_latency.json not found."))
 
     st.divider()
 
@@ -711,7 +831,7 @@ with tab3:
         st.markdown("### results/final_metrics.json")
         st.json(fm)
     else:
-        st.caption("results/final_metrics.json not found.")
+        st.caption(L("results/final_metrics.json nu a fost gasit.", "results/final_metrics.json not found."))
 
     colA, colB = st.columns(2)
     with colA:
@@ -719,13 +839,13 @@ with tab3:
             st.caption("docs/confusion_matrix_optimized.png")
             st.image(CONF_MAT_OPT_PATH, use_container_width=True)
         else:
-            st.caption("docs/confusion_matrix_optimized.png not found.")
+            st.caption(L("docs/confusion_matrix_optimized.png nu a fost gasit.", "docs/confusion_matrix_optimized.png not found."))
     with colB:
         if os.path.exists(LOSS_CURVE_PATH):
             st.caption("docs/loss_curve.png")
             st.image(LOSS_CURVE_PATH, use_container_width=True)
         else:
-            st.caption("docs/loss_curve.png not found.")
+            st.caption(L("docs/loss_curve.png nu a fost gasit.", "docs/loss_curve.png not found."))
 
     st.divider()
 
@@ -743,13 +863,13 @@ with tab3:
             st.caption(opt_acc)
             st.image(opt_acc, use_container_width=True)
         else:
-            st.caption(f"{opt_acc} not found.")
+            st.caption(L(f"{opt_acc} nu a fost gasit.", f"{opt_acc} not found."))
     with c2:
         if os.path.exists(opt_f1):
             st.caption(opt_f1)
             st.image(opt_f1, use_container_width=True)
         else:
-            st.caption(f"{opt_f1} not found.")
+            st.caption(L(f"{opt_f1} nu a fost gasit.", f"{opt_f1} not found."))
 
     c3, c4 = st.columns(2)
     with c3:
@@ -757,13 +877,13 @@ with tab3:
             st.caption(opt_curves)
             st.image(opt_curves, use_container_width=True)
         else:
-            st.caption(f"{opt_curves} not found.")
+            st.caption(L(f"{opt_curves} nu a fost gasit.", f"{opt_curves} not found."))
     with c4:
         if os.path.exists(res_curves):
             st.caption(res_curves)
             st.image(res_curves, use_container_width=True)
         else:
-            st.caption(f"{res_curves} not found.")
+            st.caption(L(f"{res_curves} nu a fost gasit.", f"{res_curves} not found."))
 
     c5, c6 = st.columns(2)
     with c5:
@@ -771,35 +891,35 @@ with tab3:
             st.caption(res_metrics)
             st.image(res_metrics, use_container_width=True)
         else:
-            st.caption(f"{res_metrics} not found.")
+            st.caption(L(f"{res_metrics} nu a fost gasit.", f"{res_metrics} not found."))
     with c6:
         if os.path.exists(res_examples):
             st.caption(res_examples)
             st.image(res_examples, use_container_width=True)
         else:
-            st.caption(f"{res_examples} not found.")
+            st.caption(L(f"{res_examples} nu a fost gasit.", f"{res_examples} not found."))
 
     st.divider()
 
     # Training history (CSV)
     th = safe_read_csv(TRAINING_HISTORY_PATH)
     if th is not None and not th.empty:
-        st.markdown("### Training history")
+        st.markdown(f"### {L('Istoric antrenare', 'Training history')}")
         st.dataframe(th.tail(25), use_container_width=True)
     else:
-        st.caption("results/training_history.csv not found.")
+        st.caption(L("results/training_history.csv nu a fost gasit.", "results/training_history.csv not found."))
 
     # feedback file stats (persistent)
     fb = safe_read_csv(FEEDBACK_FILE)
-    st.markdown("### Feedback log (persistent)")
+    st.markdown(f"### {L('Jurnal feedback (persistent)', 'Feedback log (persistent)')}")
     if fb is None or fb.empty:
-        st.caption("No feedback yet.")
+        st.caption(L("Nu exista feedback inca.", "No feedback yet."))
     else:
-        st.caption(f"Rows: {len(fb)}")
-        with st.expander("Last 25 feedback rows"):
+        st.caption(f"{L('Randuri', 'Rows')}: {len(fb)}")
+        with st.expander(L("Ultimele 25 randuri feedback", "Last 25 feedback rows")):
             st.dataframe(fb.tail(25), use_container_width=True)
 
     exp = safe_read_csv(OPT_EXPERIMENTS_PATH)
     if exp is not None and not exp.empty:
-        st.markdown("### Optimization experiments")
+        st.markdown(f"### {L('Experimente de optimizare', 'Optimization experiments')}")
         st.dataframe(exp, use_container_width=True)

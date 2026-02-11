@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "It's Ham or Spam Extension",
-  "version": "1.3",
+  "version": "1.4",
   "description": "Scan selected text for phishing/spam using local model.",
   "permissions": ["contextMenus", "storage", "tabs"],
   "host_permissions": ["http://localhost:8000/*", "http://127.0.0.1:8000/*"],

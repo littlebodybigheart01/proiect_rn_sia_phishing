@@ -20,6 +20,14 @@ function formatTs(ts) {
   }
 }
 
+function normalizeModelChoice(value) {
+  const raw = String(value || "auto").toLowerCase().trim();
+  if (raw === "standard" || raw === "optimized" || raw === "auto") return raw;
+  if (raw === "baseline" || raw === "default" || raw === "normal") return "standard";
+  if (raw === "optimised" || raw === "opt") return "optimized";
+  return "auto";
+}
+
 function render(data) {
   if (!data || !data.label) {
     content.innerHTML = "<div class='label'>NO SCAN YET</div><div class='small'>Select text, right click → Scan for spam</div>";
@@ -93,9 +101,9 @@ openAppBtn.onclick = () => {
 };
 
 chrome.storage.local.get(["lastScan", "modelChoice", "playSound"], (res) => {
-  if (res.modelChoice) {
-    modelSelect.value = res.modelChoice;
-  }
+  const normalized = normalizeModelChoice(res.modelChoice);
+  modelSelect.value = normalized;
+  chrome.storage.local.set({ modelChoice: normalized });
   render(res.lastScan);
 
   if (res.playSound && res.lastScan && res.lastScan.label === "PHISH") {
@@ -105,5 +113,5 @@ chrome.storage.local.get(["lastScan", "modelChoice", "playSound"], (res) => {
 });
 
 modelSelect.onchange = () => {
-  chrome.storage.local.set({ modelChoice: modelSelect.value });
+  chrome.storage.local.set({ modelChoice: normalizeModelChoice(modelSelect.value) });
 };

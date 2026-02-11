@@ -1,6 +1,7 @@
 const API_URLS = ["http://localhost:8000/scan", "http://127.0.0.1:8000/scan"];
 const MAX_CHARS = 5000;
-const TIMEOUT_MS = 5000;
+// First request on a model can take longer because TensorFlow/Transformers initialize lazily.
+const TIMEOUT_MS = 60000;
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
@@ -24,7 +25,20 @@ async function fetchWithTimeout(url, options) {
 function getModelChoice() {
   return new Promise((resolve) => {
     chrome.storage.local.get(["modelChoice"], (res) => {
-      resolve(res.modelChoice || "auto");
+      const raw = String(res.modelChoice || "auto").toLowerCase().trim();
+      if (raw === "standard" || raw === "optimized" || raw === "auto") {
+        resolve(raw);
+        return;
+      }
+      if (raw === "baseline" || raw === "default" || raw === "normal") {
+        resolve("standard");
+        return;
+      }
+      if (raw === "optimised" || raw === "opt") {
+        resolve("optimized");
+        return;
+      }
+      resolve("auto");
     });
   });
 }

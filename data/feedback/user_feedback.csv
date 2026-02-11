@@ -65,3 +65,13 @@ The Security Team",text,ro,models/phishing_distilbert_multilingual_optimized,0.9
 2026-02-10T13:25:47,"URGENT: Discrepancy in your payroll information Body: Dear Employee, We noticed an error in your direct deposit information for the upcoming pay cycle. Your salary payment has been put on hold. Please log in to the employee portal immediately to verify your bank details to ensure you get paid on Friday. [Link: http://hr-portal-employee-verify.net] Human Resources Dept.",text,ro,models/phishing_distilbert_multilingual_optimized,0.9998923540115356,1,0.25,0.75,330.45340399996803,correct,1,user_feedback
 2026-02-10T13:35:33,"Notificare: Datorii neachitate către bugetul de stat Mesaj: Stimate contribuabil, În urma verificărilor efectuate, figurați cu o sumă restantă de 450 RON. Pentru a evita poprirea conturilor bancare, vă rugăm să accesați portalul securizat și să efectuați plata integrală în termen de 24 de ore. [Link: http://anaf-plati-online-secure.ro/login] Direcția Generală a Finanțelor Publice.",text,ro,models/phishing_distilbert_multilingual_optimized,0.9998598098754883,1,0.25,0.75,474.2012980000254,correct,1,user_feedback
 2026-02-10T13:36:01,"Re: Întrebare legată de proiectul de licență Mesaj: Salut An prinit draftul tău pentru capitolul 3. În nare arată bine dar te rog Să revizuiesti bibliografia, este fornatată corect. Ne puten vedea niercuri la ora 14:00 în laborator pentru discuta detaliile tehnice? Nunai bine Prof Ionescu",ocr,ro,models/phishing_distilbert_multilingual_optimized,0.00013423876953311265,0,0.25,0.75,52.28115600016281,correct,0,user_feedback
+2026-02-11T16:48:51,"Notificare: Datorii neachitate către bugetul de stat Mesaj: Stimate contribuabil În urna verificărilor efectuate figurati sumă restantă de 450 RON Pentru evita poprirea conturilor bancare, Vă rugăn să accesati portalul securizat și să efectuati plata integrală în ternen de 24 de ore [Link http: anaf-plati-online secure ro/login] Direcția Generală Finanțelor Publice _",ocr,ro,models/phishing_distilbert_multilingual_optimized,0.9998264908790588,1,0.25,0.75,597.6619440007198,correct,1,user_feedback
+2026-02-11T16:49:57,"Subiect: Detalii desfășurare examen Rețele Neuronale
+
+Mesaj: Salutare studenți,
+
+Vă reamintesc că examenul final va avea loc vineri, în sala EC105, începând cu ora 09:00. Vă rog să aveți la voi carnetul de student și proiectul încărcat pe Moodle.
+
+Structura examenului a fost discutată la cursul trecut: 30% teorie și 70% prezentarea proiectului.
+
+Succes la pregătire! Conf. Dr. Ing. Popescu",text,ro,models/phishing_distilbert_multilingual_optimized,8.930001786211506e-05,0,0.25,0.75,503.0709070015291,correct,0,user_feedback
